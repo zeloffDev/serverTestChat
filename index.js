@@ -6,6 +6,8 @@ const connectSocket = require("./socket");
 const connectToMongoose = require("./mongoDB");
 const userRouter = require("./routes/userRouter");
 const chatMessageRouter = require("./routes/chatMessageRouter");
+const upload = require("./upload");
+const path = require("path");
 
 app.use(cors());
 app.use(express.json());
@@ -15,6 +17,8 @@ connectSocket(server);
 
 app.use("/user", userRouter);
 app.use("/massage", chatMessageRouter);
+app.use("/upload", upload);
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 server.listen(3001, () => {
   console.log("SERVER RUNNING");
