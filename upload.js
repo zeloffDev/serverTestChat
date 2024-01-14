@@ -24,7 +24,7 @@ router.post("/", upload.single("file"), (req, res) => {
   res.send(outputPath);
 });
 
-router.delete("/", upload.single("file"), (req, res) => {
+router.delete("/", (req, res) => {
   const body = req.body;
   const filePath = body.filePath;
   if (fs.existsSync(filePath)) {
