@@ -20,6 +20,10 @@ const userSchema = mongoose.Schema(
       type: [mongoose.Schema.Types.ObjectId],
       ref: "User",
     },
+    listFriendRequest: {
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: "User",
+    },
   },
   {
     timestamps: true,

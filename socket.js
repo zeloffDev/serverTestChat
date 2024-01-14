@@ -1,4 +1,5 @@
 const { Server } = require("socket.io");
+const chatMassageController = require("./controller/chatMassageController");
 
 const connectSocket = (server) => {
   const io = new Server(server, {
@@ -16,6 +17,7 @@ const connectSocket = (server) => {
     socket.on("send_massage", (message) => {
       console.log("Send Massage", message);
       socket.to(message.id).emit("receive_massage", message);
+      chatMassageController.createMassageWithSocket(message);
     });
 
     socket.on("disconnect", () => {
