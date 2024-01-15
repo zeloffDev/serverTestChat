@@ -3,7 +3,10 @@ const mongoose = require("mongoose");
 
 const uri =
   "mongodb+srv://zeloff:Test.123@cluster0.waohfhy.mongodb.net/?retryWrites=true&w=majority";
-const client = new MongoClient(uri, {});
+const client = new MongoClient(uri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
 async function connectToMongoDB() {
   try {
