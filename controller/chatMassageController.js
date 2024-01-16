@@ -19,6 +19,7 @@ const createApiResponse = (
 const chatMassageController = {
   getListHistoryMassage: async (req, res) => {
     try {
+      console.log("request");
       const params = req.query;
       const page = parseInt(params.page) || 1;
       const pageSize = parseInt(params.pageSize) || 10;
