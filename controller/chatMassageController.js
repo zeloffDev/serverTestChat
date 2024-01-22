@@ -1,20 +1,5 @@
 const ChatMassage = require("../models/chatMassageModel");
-
-const createApiResponse = (
-  data = null,
-  page = null,
-  pageSize = null,
-  totalPage = null,
-  totalRecord = null
-) => {
-  return {
-    data,
-    page,
-    pageSize,
-    totalPage,
-    totalRecord,
-  };
-};
+const payload = require("../payload/payload");
 
 const chatMassageController = {
   getListHistoryMassage: async (req, res) => {
@@ -46,17 +31,15 @@ const chatMassageController = {
       const totalRecord = listAllHistoryMassage.length;
       const totalPage = Math.ceil(totalRecord / pageSize);
 
-      res
-        .status(200)
-        .json(
-          createApiResponse(
-            listHistoryMassage,
-            page,
-            pageSize,
-            totalPage,
-            totalRecord
-          )
-        );
+      res.status(200).json(
+        payload.createApiResponsePage({
+          data: listHistoryMassage,
+          page,
+          pageSize,
+          totalPage,
+          totalRecord,
+        })
+      );
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: "Internal Server Error" });
@@ -67,7 +50,7 @@ const chatMassageController = {
     try {
       const body = req.body;
       const massage = await ChatMassage.create(body);
-      res.status(200).json(massage);
+      res.status(200).json(payload.createApiResponseSuccess({ data: massage }));
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: "Internal Server Error" });
@@ -97,7 +80,7 @@ const chatMassageController = {
         { _id: massageId },
         { $set: newMassage }
       );
-      res.status(200).json(massage);
+      res.status(200).json(payload.createApiResponseSuccess({ data: massage }));
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: "Internal Server Error" });
@@ -109,7 +92,7 @@ const chatMassageController = {
       const params = req.params;
       const massageId = params.massageId;
       const massage = await ChatMassage.deleteOne({ _id: massageId });
-      res.status(200).json(massage);
+      res.status(200).json(payload.createApiResponseSuccess({ data: massage }));
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: "Internal Server Error" });

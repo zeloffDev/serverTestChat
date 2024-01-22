@@ -8,13 +8,17 @@ const userRouter = require("./routes/userRouter");
 const chatMessageRouter = require("./routes/chatMessageRouter");
 const upload = require("./upload");
 const path = require("path");
+const authenticateToken = require("./authenticate");
+// const { authorizeRoles, ADMIN } = require("./roles");
 
 app.use(cors());
 app.use(express.json());
+app.use(authenticateToken);
 const server = http.createServer(app);
 connectToMongoose();
 connectSocket(server);
 
+// app.use("/user", authorizeRoles(ADMIN), userRouter);
 app.use("/user", userRouter);
 app.use("/massage", chatMessageRouter);
 app.use("/upload", upload);

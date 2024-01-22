@@ -1,9 +1,12 @@
 const { Server } = require("socket.io");
+require("dotenv").config();
+
 const chatMassageController = require("./controller/chatMassageController");
+const clientOrigin = process.env.CLIENT_ORIGIN;
 
 const connectSocket = (server) => {
   const io = new Server(server, {
-    cors: { origin: ["http://localhost:3000"], methods: ["GET", "POST"] },
+    cors: { origin: [clientOrigin], methods: ["GET", "POST"] },
   });
 
   io.on("connection", (socket) => {

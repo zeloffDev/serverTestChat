@@ -1,15 +1,16 @@
 const { MongoClient } = require("mongodb");
 const mongoose = require("mongoose");
+require("dotenv").config();
 
-const uri =
-  "mongodb+srv://zeloff:Test.123@cluster0.waohfhy.mongodb.net/?retryWrites=true&w=majority";
-const client = new MongoClient(uri, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+const uri = process.env.MONGO_DB_URL;
 
 async function connectToMongoDB() {
   try {
+    const client = new MongoClient(uri, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+
     await client.connect();
     console.log("Connected to MongoDB");
   } catch (error) {

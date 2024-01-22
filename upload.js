@@ -2,6 +2,7 @@ const router = require("express").Router();
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
+const payload = require("./payload/payload");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -21,7 +22,7 @@ const upload = multer({ storage: storage });
 router.post("/", upload.single("file"), (req, res) => {
   const imagePath = req.file.path;
   const outputPath = imagePath.replace(/\\/g, "/");
-  res.send(outputPath);
+  res.send(payload.createApiResponseSuccess({ data: outputPath }));
 });
 
 router.delete("/", (req, res) => {
@@ -30,13 +31,25 @@ router.delete("/", (req, res) => {
   if (fs.existsSync(filePath)) {
     fs.unlink(filePath, (err) => {
       if (err) {
-        res.send(`Error deleting file: ${err}`);
+        res.send(
+          payload.createApiResponseError({
+            message: `Error deleting file: ${err}`,
+          })
+        );
       } else {
-        res.send(`File ${filePath} has been deleted successfully.`);
+        res.send(
+          payload.createApiResponseSuccess({
+            message: `File ${filePath} has been deleted successfully.`,
+          })
+        );
       }
     });
   } else {
-    res.send(`File ${filePath} does not exist.`);
+    res.send(
+      payload.createApiResponseError({
+        message: `File ${filePath} does not exist.`,
+      })
+    );
   }
 });
 

@@ -1,20 +1,5 @@
 const User = require("../models/usersModel");
-
-const createApiResponse = (
-  data = null,
-  page = null,
-  pageSize = null,
-  totalPage = null,
-  totalRecord = null
-) => {
-  return {
-    data,
-    page,
-    pageSize,
-    totalPage,
-    totalRecord,
-  };
-};
+const payload = require("../payload/payload");
 
 const userController = {
   signup: async (req, res) => {
@@ -23,10 +8,20 @@ const userController = {
       const userName = body.userName;
       const userAlreadyExists = await User.findOne({ userName });
       if (userAlreadyExists) {
-        res.status(500).json({ message: "Account already exists" });
+        res.status(500).json(
+          payload.createApiResponseError({
+            message: "Account already exists",
+          })
+        );
       } else {
         const user = await User.create(body);
-        res.status(200).json(user);
+        res.status(200).json(
+          payload.createApiResponseSuccess({
+            data: user,
+            status: 200,
+            message: "Account already exists",
+          })
+        );
       }
     } catch (error) {
       console.error(error);
@@ -41,9 +36,19 @@ const userController = {
       const password = body.password;
       const userAlreadyExists = await User.findOne({ userName, password });
       if (userAlreadyExists) {
-        res.status(200).json({ message: "Logged in successfully" });
+        res.status(200).json(
+          payload.createApiResponseSuccess({
+            data: userAlreadyExists,
+            status: 200,
+            message: "Account already exists",
+          })
+        );
       } else {
-        res.status(500).json({ message: "Username or password is wrong" });
+        res.status(500).json(
+          payload.createApiResponseError({
+            message: "Username or password is wrong",
+          })
+        );
       }
     } catch (error) {
       console.error(error);
@@ -71,11 +76,15 @@ const userController = {
       const totalRecord = listAllUser.length;
       const totalPage = Math.ceil(totalRecord / pageSize);
 
-      res
-        .status(200)
-        .json(
-          createApiResponse(listUser, page, pageSize, totalPage, totalRecord)
-        );
+      res.status(200).json(
+        payload.createApiResponsePage({
+          data: listUser,
+          page,
+          pageSize,
+          totalPage,
+          totalRecord,
+        })
+      );
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: "Internal Server Error" });
@@ -106,11 +115,15 @@ const userController = {
       const totalRecord = listAllFriends.length;
       const totalPage = Math.ceil(totalRecord / pageSize);
 
-      res
-        .status(200)
-        .json(
-          createApiResponse(listFriends, page, pageSize, totalPage, totalRecord)
-        );
+      res.status(200).json(
+        payload.createApiResponsePage({
+          data: listFriends,
+          page,
+          pageSize,
+          totalPage,
+          totalRecord,
+        })
+      );
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: "Internal Server Error" });
@@ -141,17 +154,15 @@ const userController = {
       const totalRecord = listAllFriendsRequest.length;
       const totalPage = Math.ceil(totalRecord / pageSize);
 
-      res
-        .status(200)
-        .json(
-          createApiResponse(
-            listFriendsRequest,
-            page,
-            pageSize,
-            totalPage,
-            totalRecord
-          )
-        );
+      res.status(200).json(
+        payload.createApiResponsePage({
+          data: listFriendsRequest,
+          page,
+          pageSize,
+          totalPage,
+          totalRecord,
+        })
+      );
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: "Internal Server Error" });
@@ -168,7 +179,9 @@ const userController = {
         { $push: { listFriendRequest: friendId } },
         { new: true }
       );
-      res.status(200).json(updatedUser);
+      res
+        .status(200)
+        .json(payload.createApiResponseSuccess({ data: updatedUser }));
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: "Internal Server Error" });
@@ -185,7 +198,9 @@ const userController = {
         { $pull: { listFriendRequest: friendId } },
         { new: true }
       );
-      res.status(200).json(updatedUser);
+      res
+        .status(200)
+        .json(payload.createApiResponseSuccess({ data: updatedUser }));
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: "Internal Server Error" });
@@ -205,7 +220,9 @@ const userController = {
         },
         { new: true }
       );
-      res.status(200).json(updatedUser);
+      res
+        .status(200)
+        .json(payload.createApiResponseSuccess({ data: updatedUser }));
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: "Internal Server Error" });
@@ -222,7 +239,9 @@ const userController = {
         { $pull: { listFriend: friendId } },
         { new: true }
       );
-      res.status(200).json(updatedUser);
+      res
+        .status(200)
+        .json(payload.createApiResponseSuccess({ data: updatedUser }));
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: "Internal Server Error" });
