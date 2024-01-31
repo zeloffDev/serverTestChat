@@ -104,10 +104,12 @@ const userController = {
 
       const listAllFriends = await User.find({
         _id: { $in: listFriendIds },
+        name: { $regex: params?.name ?? "" },
       });
 
       const listFriends = await User.find({
         _id: { $in: listFriendIds },
+        name: { $regex: params?.name ?? "" },
       })
         .skip(skip)
         .limit(pageSize);
@@ -173,10 +175,10 @@ const userController = {
     try {
       const body = req.body;
       const userId = body.userId;
-      const friendId = body.friendId;
+      const friendIdToAdd = body.friendIdToAdd;
       const updatedUser = await User.findByIdAndUpdate(
         userId,
-        { $push: { listFriendRequest: friendId } },
+        { $push: { listFriendRequest: friendIdToAdd } },
         { new: true }
       );
       res

@@ -16,6 +16,23 @@ const payload = {
       status,
     };
   },
+  createApiResponseSkipCountSuccess: ({
+    data = null,
+    message = "Success",
+    status = 200,
+    skip = 0,
+    limit = 10,
+  }) => {
+    const next = data.length < limit;
+    return {
+      data,
+      status,
+      message,
+      skip,
+      limit,
+      next: !next,
+    };
+  },
   createApiResponseSuccess: ({
     data = null,
     message = "Success",
