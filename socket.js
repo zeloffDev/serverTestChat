@@ -17,10 +17,15 @@ const connectSocket = (server) => {
       socket.join(id);
     });
 
-    socket.on("send_massage", (message) => {
-      console.log("Send Massage", message);
-      socket.to(message.id).emit("receive_massage", message);
+    socket.on("send_message", (message) => {
+      console.log("Send Message", message.receiverId);
+      socket.to(message.receiverId).emit("receive_message", message);
       chatMassageController.createMassageWithSocket(message);
+    });
+
+    socket.on("signOut", () => {
+      console.log("User logged out");
+      socket.disconnect();
     });
 
     socket.on("disconnect", () => {

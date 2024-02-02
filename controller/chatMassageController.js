@@ -4,40 +4,27 @@ const payload = require("../payload/payload");
 const chatMassageController = {
   getListHistoryMassage: async (req, res) => {
     try {
-      console.log("request");
       const params = req.query;
-      const page = parseInt(params.page) || 1;
-      const pageSize = parseInt(params.pageSize) || 10;
-      const skip = (page - 1) * pageSize;
+      const skip = parseInt(params.skip) || 0;
+      const limit = parseInt(params.limit) || 10;
       const senderId = params.senderId;
       const receiverId = params.receiverId;
 
-      const listAllHistoryMassage = await ChatMassage.find({
-        $or: [
-          { senderId, receiverId },
-          { senderId: receiverId, receiverId: senderId },
-        ],
-      });
-
       const listHistoryMassage = await ChatMassage.find({
         $or: [
-          { senderId, receiverId },
+          { senderId, senderId, receiverId: receiverId },
           { senderId: receiverId, receiverId: senderId },
         ],
       })
+        .sort({ createdAt: -1 })
         .skip(skip)
-        .limit(pageSize);
-
-      const totalRecord = listAllHistoryMassage.length;
-      const totalPage = Math.ceil(totalRecord / pageSize);
+        .limit(limit);
 
       res.status(200).json(
-        payload.createApiResponsePage({
+        payload.createApiResponseSkipCountSuccess({
           data: listHistoryMassage,
-          page,
-          pageSize,
-          totalPage,
-          totalRecord,
+          skip,
+          limit,
         })
       );
     } catch (error) {
@@ -69,15 +56,15 @@ const chatMassageController = {
   recallMassage: async (req, res) => {
     try {
       const params = req.params;
-      const massageId = params.massageId;
-      const oldMassage = await ChatMassage.findOne({ _id: massageId });
+      const messageId = params.messageId;
+      const oldMassage = await ChatMassage.findOne({ _id: messageId });
       const newMassage = {
         ...oldMassage._doc,
         massage: "Đã thu hồi",
-        type: "RECALL",
+        type: "REVOKE",
       };
       const massage = await ChatMassage.updateOne(
-        { _id: massageId },
+        { _id: messageId },
         { $set: newMassage }
       );
       res.status(200).json(payload.createApiResponseSuccess({ data: massage }));
@@ -90,8 +77,8 @@ const chatMassageController = {
   deleteMassage: async (req, res) => {
     try {
       const params = req.params;
-      const massageId = params.massageId;
-      const massage = await ChatMassage.deleteOne({ _id: massageId });
+      const messageId = params.messageId;
+      const massage = await ChatMassage.deleteOne({ _id: messageId });
       res.status(200).json(payload.createApiResponseSuccess({ data: massage }));
     } catch (error) {
       console.error(error);

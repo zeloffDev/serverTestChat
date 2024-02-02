@@ -2,6 +2,7 @@ const payload = require("./payload/payload");
 
 const listPassAuthenticate = ["/user/signup", "/user/signIn", "/uploads"];
 const authenticateToken = (req, res, next) => {
+  console.log("request");
   if (listPassAuthenticate.includes(req.path)) {
     return next();
   }

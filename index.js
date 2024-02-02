@@ -22,7 +22,7 @@ connectSocket(server);
 // app.use("/user", authorizeRoles(ADMIN), userRouter);
 app.use("/user", userRouter);
 app.use("/friend", friendRouter);
-app.use("/massage", chatMessageRouter);
+app.use("/message", chatMessageRouter);
 app.use("/upload", upload);
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
