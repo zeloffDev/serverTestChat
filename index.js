@@ -2,14 +2,15 @@ const express = require("express");
 const app = express();
 const http = require("http");
 const cors = require("cors");
-const connectSocket = require("./socket");
-const connectToMongoose = require("./mongoDB");
-const userRouter = require("./routes/userRouter");
-const friendRouter = require("./routes/friendRouter");
-const chatMessageRouter = require("./routes/chatMessageRouter");
-const upload = require("./upload");
+const userRouter = require("./src/routes/userRouter");
+const friendRouter = require("./src/routes/friendRouter");
+const chatMessageRouter = require("./src/routes/chatMessageRouter");
+const upload = require("./src/upLoads/upload");
 const path = require("path");
-const authenticateToken = require("./authenticate");
+const connectToMongoose = require("./src/config/mongoDB");
+const authenticateToken = require("./src/authenticate/authenticate");
+const connectSocket = require("./src/socket/socket");
+
 // const { authorizeRoles, ADMIN } = require("./roles");
 
 app.use(cors());

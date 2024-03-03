@@ -1,7 +1,7 @@
 const { Server } = require("socket.io");
 require("dotenv").config();
 
-const chatMassageController = require("./controller/chatMassageController");
+const chatMassageController = require("../controller/chatMassageController");
 const clientOrigin = process.env.CLIENT_ORIGIN;
 
 const connectSocket = (server) => {
