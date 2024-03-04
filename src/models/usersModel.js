@@ -8,6 +8,9 @@ const userSchema = mongoose.Schema(
     name: {
       type: String,
     },
+    about: {
+      type: String,
+    },
     userName: {
       type: String,
       require: true,

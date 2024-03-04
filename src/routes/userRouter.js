@@ -2,8 +2,10 @@ const userController = require("../controller/userController");
 
 const router = require("express").Router();
 
+router.get("/", userController.getUser);
 router.post("/signup", userController.signup);
 router.post("/signIn", userController.signIn);
+router.put("/update", userController.update);
 router.get("/listUser", userController.getListUser);
 router.get("/listFriend", userController.getListFriend);
 

@@ -56,6 +56,50 @@ const userController = {
     }
   },
 
+  getUser: async (req, res) => {
+    try {
+      const params = req.query;
+      const userId = params.userId;
+      const user = await User.findById(userId);
+      res.status(200).json(
+        payload.createApiResponseSuccess({
+          data: user,
+          status: 200,
+        })
+      );
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  },
+
+  update: async (req, res) => {
+    try {
+      const body = req.body;
+      const userId = body._id;
+      const newBody = {
+        avatar: body.avatar,
+        name: body.name,
+        about: body.about,
+      };
+      const updatedUser = await User.updateOne(
+        { _id: userId },
+        {
+          $set: newBody,
+        }
+      );
+      res.status(200).json(
+        payload.createApiResponseSuccess({
+          data: updatedUser,
+          status: 200,
+        })
+      );
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  },
+
   getListUser: async (req, res) => {
     try {
       const params = req.query;
